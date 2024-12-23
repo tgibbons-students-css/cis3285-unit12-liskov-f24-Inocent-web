@@ -6,13 +6,33 @@ using System.Threading.Tasks;
 
 namespace SubtypeCovariance
 {
-    public class EntityRepository : IEntityRepository<Entity>
+    public class EntityRepository : IEntityRepository<User>
     {
 
-        // **** This method should generate an error which you need to fix ****
-        public virtual Entity GetByID(Guid id)
+        private readonly List<User> _users = new List<User>();
+
+        public void Add(User user)
         {
-            return new Entity(id);
+            _users.Add(user);
+        }
+
+        public void Remove(Guid id)
+        {
+            var user = _users.FirstOrDefault(u => u.ID == id);
+            if (user != null)
+            {
+                _users.Remove(user);
+            }
+        }
+
+        public User GetById(Guid id)
+        {
+            return _users.FirstOrDefault(u => u.ID == id);
+        }
+
+        public IEnumerable<User> GetAll()
+        {
+            return _users;
         }
     }
 }
